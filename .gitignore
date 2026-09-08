@@ -1,0 +1,29 @@
+# Dependencies
+node_modules
+.pnpm-store
+
+# Build
+.next
+dist
+build
+out
+
+# Env
+.env
+.env.*
+!.env.example
+
+# Database & uploads
+*.db
+*.db-*
+media
+
+# OS / IDE
+.DS_Store
+Thumbs.db
+.idea
+.vscode
+
+# Misc
+*.log
+npm-debug.log*
