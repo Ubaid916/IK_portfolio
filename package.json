@@ -6,7 +6,7 @@
   "scripts": {
     "dev": "cross-env NODE_OPTIONS=--no-deprecation next dev --webpack",
     "build": "cross-env NODE_OPTIONS=--no-deprecation next build",
-    "start": "cross-env NODE_OPTIONS=--no-deprecation next start",
+    "start": "cross-env NODE_OPTIONS=--no-deprecation next start --hostname 0.0.0.0",
     "payload": "cross-env NODE_OPTIONS=--no-deprecation payload",
     "generate:types": "payload generate:types",
     "generate:importmap": "payload generate:importmap"
