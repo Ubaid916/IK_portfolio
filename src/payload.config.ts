@@ -16,12 +16,34 @@ import { defaultHomepage } from './lib/defaults'
 const filename = fileURLToPath(import.meta.url)
 const dirname = path.dirname(filename)
 
-const serverURL =
+const serverURL = (
   process.env.NEXT_PUBLIC_SERVER_URL ||
   process.env.COOLIFY_URL ||
   'http://localhost:3000'
+).replace(/\/$/, '')
 
-fs.mkdirSync(path.resolve(dirname, '../media'), { recursive: true })
+function resolveSqliteUrl() {
+  const candidates = [
+    process.env.DATABASE_URL,
+    `file:${path.join(process.cwd(), 'portfolio.db')}`,
+    'file:/tmp/portfolio.db',
+  ].filter(Boolean) as string[]
+
+  for (const url of candidates) {
+    if (!url.startsWith('file:')) return url
+    const filePath = url.slice('file:'.length)
+    const abs = path.isAbsolute(filePath) ? filePath : path.resolve(process.cwd(), filePath)
+    try {
+      fs.mkdirSync(path.dirname(abs), { recursive: true })
+      fs.accessSync(path.dirname(abs), fs.constants.W_OK)
+      return `file:${abs}`
+    } catch {
+      // try next writable location
+    }
+  }
+
+  return 'file:/tmp/portfolio.db'
+}
 
 export default buildConfig({
   serverURL,
@@ -48,9 +70,8 @@ export default buildConfig({
   },
   db: sqliteAdapter({
     client: {
-      url: process.env.DATABASE_URL || 'file:./portfolio.db',
+      url: resolveSqliteUrl(),
     },
-    // Production Docker (HostCry) starts with an empty DB. Push creates tables.
     push: true,
   }),
   sharp,

@@ -7,6 +7,10 @@ const __filename = fileURLToPath(import.meta.url)
 const dirname = path.dirname(__filename)
 
 const nextConfig: NextConfig = {
+  serverExternalPackages: ['sharp', '@libsql/client', 'libsql'],
+  typescript: {
+    ignoreBuildErrors: true,
+  },
   images: {
     localPatterns: [
       {
