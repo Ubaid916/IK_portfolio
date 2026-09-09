@@ -12,6 +12,7 @@ import { Projects } from './collections/Projects'
 import { Reels } from './collections/Reels'
 import { Homepage } from './globals/Homepage'
 import { defaultHomepage } from './lib/defaults'
+import { migrations } from './migrations'
 
 const filename = fileURLToPath(import.meta.url)
 const dirname = path.dirname(filename)
@@ -72,7 +73,10 @@ export default buildConfig({
     client: {
       url: resolveSqliteUrl(),
     },
+    // Local `next dev` still auto-pushes. Production ignores push and
+    // must run these migrations or admin/login crashes with no tables.
     push: true,
+    prodMigrations: migrations,
   }),
   sharp,
   onInit: async (payload) => {

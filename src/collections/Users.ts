@@ -6,6 +6,11 @@ export const Users: CollectionConfig = {
     useAsTitle: 'email',
     hidden: true,
   },
-  auth: true,
+  auth: {
+    cookies: {
+      sameSite: 'Lax',
+      secure: (process.env.NEXT_PUBLIC_SERVER_URL || '').startsWith('https://'),
+    },
+  },
   fields: [],
 }
